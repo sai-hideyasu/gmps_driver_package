@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+  <!-- param -->
+  <arg name="offset_search_mode" default="false"/>
+  <arg name="delay_dist" default="0.1"/>
+  <arg name="watchdog_timeout" default="0.5"/>
+  <!-- topic name -->
+  <arg name="in_velocity_name" default="/velocity"/>
+  <arg name="in_soft_reset_name" default="/gmps_soft_reset"/>
+  <arg name="in_gmps_can_frame_name" default="/from_can_bus"/>
+  <arg name="out_gmps_can_frame_name" default="/to_can_bus"/>
+  <arg name="out_gmps_detect_name" default="/gmps_detect"/>
+  <arg name="out_gmps_error_name" default="/gmps_error"/>
+
+  <node pkg="gmps_driver" exec="gmps_driver" name="gmps_driver" output="log" >
+    <param name="offset_search_mode" value="$(var offset_search_mode)"/>
+    <param name="delay_dist" value="$(var delay_dist)"/>
+    <param name="watchdog_timeout" value="$(var watchdog_timeout)"/>
+
+    <remap from="in_velocity" to="$(var in_velocity_name)"/>
+    <remap from="in_soft_reset" to="$(var in_soft_reset_name)"/>
+    <remap from="in_gmps_can_frame" to="$(var in_gmps_can_frame_name)"/>
+    <remap from="out_gmps_can_frame" to="$(var out_gmps_can_frame_name)"/>
+    <remap from="out_gmps_detect" to="$(var out_gmps_detect_name)"/>
+    <remap from="out_gmps_error" to="$(var out_gmps_error_name)"/>
+  </node>
+</launch>
