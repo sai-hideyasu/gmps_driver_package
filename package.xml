@@ -5,7 +5,7 @@
   <version>2.1.0</version>
   <description>gmps_driver</description>
   <maintainer email="h-mukumoto@he.aichi-steel.co.jp">h-mukumoto</maintainer>
-  <license>BSD 3-Clause</license>
+  <license>Apache 2.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
   <depend>rclcpp</depend>
