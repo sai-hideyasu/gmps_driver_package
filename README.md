@@ -22,10 +22,10 @@ $ sudo ip link set can0 type can bitrate 500000
 $ sudo ip link set up can0
 
 # launch ros2_socketcan   
-$ ros2 launch ros2_socketcan socket_can_bridge.launch.xml`
+$ ros2 launch ros2_socketcan socket_can_bridge.launch.xml
 
 # launch gmps_driver  
-$ ros2 launch gmps_driver gmps_driver`
+$ ros2 launch gmps_driver gmps_driver
 ```
 
  
