@@ -9,7 +9,7 @@ find_package(gmps_msgs REQUIRED)
 find_package(can_msgs REQUIRED)
 
 add_executable(gmps_driver
- src/gmps_driver_package_can_ros2.cpp
+ src/gmps_driver.cpp
 )
 ament_target_dependencies(gmps_driver
  rclcpp
