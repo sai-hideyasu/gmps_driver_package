@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <launch>
   <!-- param -->
-  <arg name="offset_search_mode" default="false"/>
-  <arg name="delay_dist" default="0.1"/>
-  <arg name="watchdog_timeout" default="0.5"/>
+  <arg name="param_file" default="$(find-pkg-share gmps_driver)/config/gmsp_driver.param.yaml"/>
+
   <!-- topic name -->
   <arg name="in_velocity_name" default="/velocity"/>
   <arg name="in_soft_reset_name" default="/gmps_soft_reset"/>
@@ -13,9 +12,7 @@
   <arg name="out_gmps_error_name" default="/gmps_error"/>
 
   <node pkg="gmps_driver" exec="gmps_driver" name="gmps_driver" output="log" >
-    <param name="offset_search_mode" value="$(var offset_search_mode)"/>
-    <param name="delay_dist" value="$(var delay_dist)"/>
-    <param name="watchdog_timeout" value="$(var watchdog_timeout)"/>
+    <param from="$(var param_file)"/>
 
     <remap from="in_velocity" to="$(var in_velocity_name)"/>
     <remap from="in_soft_reset" to="$(var in_soft_reset_name)"/>
