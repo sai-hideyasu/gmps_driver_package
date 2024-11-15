@@ -76,6 +76,8 @@ private://arguments for publishDetect
     double out_lateral_deviation_;
     uint8_t out_pole_;
     uint8_t out_mm_kind_;
+    double out_delay_dist_;
+    uint16_t detect_counter_; //検知回数のカウンタ 20241115
 
 private://arguments for publishError
     uint8_t out_error_code_;
@@ -128,14 +130,20 @@ private:
 
         case CANID_GMPS_MARKER_DETECT1:
         {
-            out_counter_ = (data[1] << 8) | data[0];
-            int16_t lateral_deviation = (data[3] << 8) | data[2];
-            //uint16_t interval_dist = (data[5] << 8) | data[4]; //not used
-            //double interval_dist_m = interval_dist * 0.001; //not used
-            out_pole_ = data[6]; //N=1, S=2
-            out_mm_kind_ = data[7]; //not used
-            detect_stamp_ = stamp;
+            // for future use
+//            uint16_t nDetect = data[0] & 0x03;
+//            bool pole1 = data[0] & 0x04;
+//            bool pole2 = data[0] & 0x08;
+//            bool pole3 = data[0] & 0x10;
+            detect_counter_ = detect_counter_ + (data[0] & 0x01); //検知回数のカウントアップ
+            out_counter_ = detect_counter_;
+            int16_t lateral_deviation = (data[2] << 8) | data[1];
             out_lateral_deviation_ = lateral_deviation * 0.001;
+            out_pole_ = (data[0] & 0x04) ? 2 : 1; //N=1, S=2 //note /gmps_detectも1,2から0,1にしたい
+            out_mm_kind_ = 0;
+            out_delay_dist_ = data[7] * 0.01;
+//            out_delay_dist_ = param_delay_dist_; //paramから定義する場合
+            detect_stamp_ = stamp;
             publishDetect();
             break;
         }
@@ -463,7 +471,7 @@ private:
         msg_detect.lateral_deviation = out_lateral_deviation_;
         msg_detect.pole = out_pole_;
         msg_detect.mm_kind = out_mm_kind_; //not used
-        msg_detect.delay_dist = param_delay_dist_; //param
+        msg_detect.delay_dist = out_delay_dist_;
         pub_gmps_detect_->publish(msg_detect);
     }
 
@@ -487,6 +495,7 @@ public:
         , param_watchdog_timeout_(declare_parameter<double>("watchdog_timeout", 0.5))
         , f_receive_ack_(false)
         , f_receive_info_(false)
+        , detect_counter_(0)
     {
         RCLCPP_INFO(this->get_logger(), "constructor called");
 
